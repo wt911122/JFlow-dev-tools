@@ -1,0 +1,17 @@
+{
+  "name": "jflow-dev-tools",
+  "description": "develop tools for jflow",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "devtools_page": "devtools.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "http://*/",
+    "https://*/"
+  ],
+  "permissions": [
+    "scripting"
+  ]
+}

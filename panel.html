@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      .treenode > .treenode{
+        margin-left: 20px;
+      }
+      .treetext{
+        font-size: 14px;
+      }
+      .treetext:hover {
+        cursor: pointer;
+        background-color:royalblue;
+        color: #fff;
+      }
+      .treetext.active {
+        background-color:dodgerblue;
+        color: #fff;
+      }
+      .propertypanel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+      }
+      .propertypanel > .propertyheaderwrapper {
+        display: none;
+        position: relative;
+        border-bottom: 1px solid blue;
+      }
+      .propertypanel > #propertycontent {
+        height: 0;
+      }
+      .propertypanel.active{
+        border-top: 2px solid blue;
+      }
+      .propertypanel.active > #propertycontent{
+        height: 240px;
+        overflow: scroll;
+      }
+      .propertypanel.active > .propertyheaderwrapper {
+        display: block;
+      }
+      #headerclosebtn{
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div><button id="refreshbtn">刷新</button></div>
+      <div id="tree">
+        未加载任何 jflow 实例 xxx
+      </div>
+      <div id="property" class="propertypanel">
+        <div class="propertyheaderwrapper">
+          <button id="headerclosebtn">关闭</button>
+          <div id="propertyheader"></div>
+        </div>
+        <div id="propertycontent"></div>
+      </div>
+    </div> 
+    <script src="panel.js"></script>
+  </body>
+</html>
