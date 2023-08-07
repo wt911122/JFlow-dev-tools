@@ -82,6 +82,7 @@ chrome.runtime.onConnect.addListener(function(devToolsConnection) {
     devToolsConnection.onMessage.addListener(onMessage);
 
     devToolsConnection.onDisconnect.addListener(function() {
+      console.warn('disconnect!')
         devToolsConnection.onMessage.removeListener(onMessage);
         tabId = connectionIdToTabIdMap[connectionId];
         // Delete all associations

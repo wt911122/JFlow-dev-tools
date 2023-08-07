@@ -39,6 +39,7 @@ function makeTree(domPath, tree) {
     });
 
     treeDom.addEventListener('mouseover', (e) => {
+        console.log(e.target.dataset.devmet);
         makeHoverElement(e.target.dataset.devmeta);
     });
 
@@ -108,6 +109,9 @@ function makePropertyPanel(node){
     panel.classList.add('active');
 }
 
+
+var backgroundPageConnection;
+
 function closePropertyPanel() {
     const panel = document.getElementById('property');
     panel.classList.remove('active');
@@ -122,34 +126,40 @@ function closePropertyPanel() {
 }
 
 
-var backgroundPageConnection = chrome.runtime.connect({
-    name: "panel"
-});
+function doConnect() {
+    backgroundPageConnection = chrome.runtime.connect({
+        name: "panel"
+    });
 
-backgroundPageConnection.onMessage.addListener(function (message) {
-    // Handle responses from the background page, if any
-    switch (message.name) {
-        case 'tree-refresh':
-            const tree = message.tree;
-            clearTree();
-            closePropertyPanel();
-            Object.keys(tree).forEach(t => {
-                makeTree(t, tree[t]);
-            })
-            break;
-        case 'node-inspect': 
-            const node = message.node;
-            console.log(node);
-            makePropertyPanel(node);
-            break;
-    }
-});
+    backgroundPageConnection.onMessage.addListener(function (message) {
+        // Handle responses from the background page, if any
+        switch (message.name) {
+            case 'tree-refresh':
+                const tree = message.tree;
+                clearTree();
+                closePropertyPanel();
+                Object.keys(tree).forEach(t => {
+                    makeTree(t, tree[t]);
+                })
+                break;
+            case 'node-inspect': 
+                const node = message.node;
+                console.log(node);
+                makePropertyPanel(node);
+                break;
+        }
+    });
 
-backgroundPageConnection.postMessage({
-    tabId: chrome.devtools.inspectedWindow.tabId,
-    name: 'panel-init',
-    // scriptToInject: "content_script.js"
-});
+    backgroundPageConnection.postMessage({
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        name: 'panel-init',
+        // scriptToInject: "content_script.js"
+    });
+    backgroundPageConnection.onDisconnect.addListener(() => {
+        doConnect();
+    })
+}
+
 var btn = document.getElementById('refreshbtn');
 btn.addEventListener('click', function() {
     console.log('refresh tree',  chrome.devtools.inspectedWindow.tabId)
@@ -181,3 +191,5 @@ function makeHoverElement(meta) {
         meta: meta || '',
     });
 }
+
+doConnect();
